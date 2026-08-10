@@ -93,6 +93,7 @@
 </head>
 <body class="h-screen overflow-hidden bg-lightbg text-slate-800 dark:bg-darkbg dark:text-slate-100 flex flex-col relative font-sans select-none">
 
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-slate-900 z-[300] flex flex-col items-center justify-center text-white transition-opacity duration-500 p-6">
         <div class="relative flex items-center justify-center">
             <div class="absolute -inset-5 rounded-full border-2 border-dashed border-blue-500/70 orbit-ring"></div>
@@ -100,17 +101,19 @@
             <div class="absolute inset-0 rounded-full bg-blue-500/25 blur-2xl"></div>
             
             <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display logo-loader h-36 w-36 md:h-48 md:w-48 object-contain rounded-full bg-slate-800/90 p-2 border-2 border-blue-400/60 shadow-2xl relative z-10"
-                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                onerror="handleImageError(this)">
         </div>
         <p class="mt-8 text-slate-300 font-bold text-sm tracking-wide">جاري تحميل البيانات والتحديث...</p>
-        <button id="retryBtn" onclick="fetchSheetData()" class="hidden mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg active:scale-95">إعادة المحاولة 🔄</button>
+        <button id="retryBtn" onclick="fetchSheetData(true)" class="hidden mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg active:scale-95">إعادة المحاولة 🔄</button>
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-5 py-2.5 rounded-full shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-[200] text-xs md:text-sm font-bold flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
         <span id="toastMsg">تم الحفظ بنجاح!</span>
     </div>
 
+    <!-- Login Screen -->
     <div id="loginScreen" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md flex items-center justify-center z-[100] transition-opacity duration-500 hidden">
         <div class="bg-white dark:bg-darkcard p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-t-4 border-blue-500 mx-4">
             <div class="mb-5 flex justify-center">
@@ -154,8 +157,8 @@
 
             <div class="flex items-center justify-end z-10">
                 <!-- الضغط على اللوجو يُجري عملية تحديث البيانات -->
-                <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-9 w-9 md:h-11 md:w-11 object-contain rounded-full shadow-sm bg-white dark:bg-transparent border border-slate-200 dark:border-transparent cursor-pointer transition hover:scale-105 active:scale-95" onclick="fetchSheetData()" title="تحديث البيانات الآن"
-                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-9 w-9 md:h-11 md:w-11 object-contain rounded-full shadow-sm bg-white dark:bg-transparent border border-slate-200 dark:border-transparent cursor-pointer transition hover:scale-105 active:scale-95" onclick="fetchSheetData(true)" title="تحديث البيانات الآن"
+                onerror="handleImageError(this)">
             </div>
         </header>
 
@@ -178,8 +181,8 @@
                 </button>
             </div>
 
+            <!-- Teams View -->
             <div id="viewTeams" class="flex-1 overflow-y-auto pb-32 space-y-4 pt-1 px-1">
-                <!-- شريط البحث عن فريق -->
                 <div class="relative w-full">
                     <input type="text" id="searchTeamsInput" oninput="filterTeams(this.value)" placeholder="🔍 بحث عن فريق..." 
                         class="w-full py-2.5 px-4 pr-10 bg-white dark:bg-darkcard text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-darkborder rounded-2xl outline-none text-xs md:text-sm font-bold focus:ring-2 focus:ring-blue-500 shadow-sm transition">
@@ -188,34 +191,33 @@
 
                 <div id="teamsCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 md:gap-6"></div>
                 
-                <!-- لوجو الاجتماع السفلي -->
                 <div class="pt-8 pb-12 flex flex-col items-center justify-center border-t border-slate-200/60 dark:border-slate-800/80">
                     <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-32 w-32 md:h-44 md:w-44 object-contain rounded-3xl p-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 shadow-md transition hover:scale-105"
-                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    onerror="handleImageError(this)">
                     <span class="mt-3 text-xs md:text-sm font-black text-slate-500 dark:text-slate-400 tracking-wider meeting-name-display">اجتماع شباب الأنبا صرابامون</span>
                 </div>
             </div>
 
+            <!-- Ranking View -->
             <div id="viewRanking" class="hidden-app flex-1 overflow-y-auto pb-32 space-y-6 pt-2 px-1">
                 <div id="rankingCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 md:gap-6"></div>
 
-                <!-- لوجو الاجتماع السفلي -->
                 <div class="pt-8 pb-12 flex flex-col items-center justify-center border-t border-slate-200/60 dark:border-slate-800/80">
                     <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-32 w-32 md:h-44 md:w-44 object-contain rounded-3xl p-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 shadow-md transition hover:scale-105"
-                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    onerror="handleImageError(this)">
                     <span class="mt-3 text-xs md:text-sm font-black text-slate-500 dark:text-slate-400 tracking-wider meeting-name-display">اجتماع شباب الأنبا صرابامون</span>
                 </div>
             </div>
 
+            <!-- Team Details View -->
             <div id="viewTeamDetails" class="hidden-app flex-1 flex flex-col overflow-hidden pb-4">
-                <!-- شريط العودة واسم التيم -->
                 <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-darkborder mb-3 flex items-center justify-between shrink-0 gap-2">
                     <button onclick="backToTeams()" class="flex items-center gap-1.5 text-xs md:text-sm font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-2 rounded-xl transition active:scale-95">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         <span>رجوع</span>
                     </button>
                     <div class="flex items-center gap-2.5 overflow-hidden">
-                        <img id="detailTeamLogo" src="" alt="Ava-Srabamon Youth Meeting Logo" class="w-9 h-9 md:w-11 md:h-11 object-contain rounded-xl border border-slate-200 dark:border-slate-700 shrink-0" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                        <img id="detailTeamLogo" src="" alt="Ava-Srabamon Youth Meeting Logo" class="w-9 h-9 md:w-11 md:h-11 object-contain rounded-xl border border-slate-200 dark:border-slate-700 shrink-0" onerror="handleImageError(this)">
                         <h2 id="detailTeamName" class="text-base md:text-xl font-black text-slate-800 dark:text-white truncate">اسم التيم</h2>
                     </div>
                     <div class="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800/60 px-3 py-1.5 rounded-xl text-center shrink-0">
@@ -224,7 +226,6 @@
                     </div>
                 </div>
 
-                <!-- شريط اختيار التاريخ وبحث الأعضاء -->
                 <div class="bg-white dark:bg-darkcard p-3 rounded-2xl shadow-sm border border-slate-200 dark:border-darkborder mb-3 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
                     <div class="flex items-center gap-2 w-full md:w-auto shrink-0">
                         <label class="text-xs md:text-sm font-extrabold text-slate-700 dark:text-slate-200 shrink-0">📅 اختر التاريخ:</label>
@@ -232,7 +233,6 @@
                         </select>
                     </div>
 
-                    <!-- البحث عن عضو -->
                     <div class="relative w-full md:w-64">
                         <input type="text" id="searchMembersInput" oninput="filterMembers(this.value)" placeholder="🔍 بحث عن اسم ..." 
                             class="w-full py-2 px-3 pr-9 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-xs font-bold focus:ring-2 focus:ring-blue-500">
@@ -240,7 +240,6 @@
                     </div>
                 </div>
 
-                <!-- قائمة بطاقات تقييم الأعضاء -->
                 <div id="membersAssessmentList" class="flex-1 overflow-y-auto space-y-3 pr-1 pb-16"></div>
             </div>
 
@@ -248,40 +247,12 @@
     </div>
 
     <script>
-
-
-
-
-
-
-
-
-
-
-
-
         const API_URL = "https://script.google.com/macros/s/AKfycbzhqQA_gWRiYmO5iSISTXgvaPO92Mrxvg7-s_UVe6I4PaJKUdxDEIhzgAEMiEUPTz4Ggg/exec";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         let CONFIG = {
             PASSWORD: "",
             MEETING_NAME: "اجتماع شباب الأنبا صرابامون",
-            LOGO_IMAGE: "",
+            LOGO_IMAGE: "logo.png",
             ALERT: ""
         };
 
@@ -291,15 +262,46 @@
         let activeTeam = null;
         let selectedDate = null;
         let autoRefreshTimer = null;
+        let isAuthenticated = false;
 
+        // دالة معالجة رابط الصورة سواء كان رابط جودل درايف أو اسم ملف محلي مرفوع مع التطبيق
         function processDriveUrl(url) {
-            if (!url) return "";
+            if (!url) return "logo.png";
             const str = String(url).trim();
+            
+            // روابط Google Drive
             const match = str.match(/\/file\/d\/([^\/\?]+)/) || str.match(/id=([^&]+)/);
             if (match && match[1]) {
                 return `https://lh3.googleusercontent.com/d/${match[1]}`;
             }
+
+            // الروابط المباشرة (http/https)
+            if (str.startsWith('http://') || str.startsWith('https://')) {
+                return str;
+            }
+
+            // اسم ملف صورة محلي: إذا لم يحتوي على امتداد، نضيف .png
+            if (!/\.(png|jpg|jpeg|svg|webp|gif)$/i.test(str)) {
+                return `${str}.png`;
+            }
+
             return str;
+        }
+
+        // دالة المعالجة الذكية في حالة عدم العثور على مسار الصورة
+        function handleImageError(imgElem) {
+            if (!imgElem) return;
+            
+            if (!imgElem.dataset.errorCount) {
+                imgElem.dataset.errorCount = "1";
+                imgElem.src = "logo.png"; // تجربة اسم ملف محلي افتراضي
+            } else if (imgElem.dataset.errorCount === "1") {
+                imgElem.dataset.errorCount = "2";
+                imgElem.src = "logo.jpg"; // تجربة امتداد jpg
+            } else {
+                // تراجع للوجو SVG الافتراضي عند فشل كل المحاولات
+                imgElem.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4=';
+            }
         }
 
         function formatPercentValue(rawVal) {
@@ -315,7 +317,7 @@
             return num.toFixed(1) + '%';
         }
 
-        async function fetchSheetData() {
+        async function fetchSheetData(isManualTrigger = false) {
             const overlay = document.getElementById('loadingOverlay');
             const retryBtn = document.getElementById('retryBtn');
 
@@ -342,21 +344,29 @@
                 teamSheetsData = data.teamSheets || {};
 
                 renderUI();
-                renderTeamsView();
+                renderTeamsView(document.getElementById('searchTeamsInput')?.value || "");
                 renderRankingView();
 
                 if (activeTeam && teamSheetsData[activeTeam]) {
                     const sheetInfo = teamSheetsData[activeTeam];
-                    document.getElementById('detailTeamTotalPercent').innerText = formatPercentValue(sheetInfo.teamTotalPercent);
-                    if (selectedDate) renderMembersForDate(selectedDate);
+                    const percentElem = document.getElementById('detailTeamTotalPercent');
+                    if (percentElem) percentElem.innerText = formatPercentValue(sheetInfo.teamTotalPercent);
+                    if (selectedDate) renderMembersForDate(selectedDate, document.getElementById('searchMembersInput')?.value || "");
                 }
 
                 overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 500);
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 500);
+
+                if (isManualTrigger) {
+                    showToast("تم تحديث البيانات بنجاح 🔄");
+                }
 
             } catch (error) {
                 console.error("خطأ أثناء جلب البيانات:", error);
                 retryBtn.classList.remove('hidden');
+                overlay.classList.remove('opacity-0');
             }
         }
 
@@ -367,8 +377,12 @@
             const loginScreen = document.getElementById('loginScreen');
 
             if (input === String(CONFIG.PASSWORD).trim()) {
+                isAuthenticated = true;
                 loginScreen.style.opacity = '0';
-                setTimeout(() => loginScreen.classList.add('hidden'), 500);
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    loginScreen.style.opacity = '1';
+                }, 500);
             } else {
                 errorMsg.classList.remove('hidden');
             }
@@ -394,8 +408,11 @@
             }
 
             const loginScreen = document.getElementById('loginScreen');
-            if (CONFIG.PASSWORD && CONFIG.PASSWORD.trim() !== "" && loginScreen.classList.contains('hidden')) {
+            // إصلاح المشكلة: عدم إظهار شاشة الدخول إذا كان المستخدم مسجلاً بالفعل
+            if (!isAuthenticated && CONFIG.PASSWORD && CONFIG.PASSWORD.trim() !== "") {
                 loginScreen.classList.remove('hidden');
+            } else {
+                loginScreen.classList.add('hidden');
             }
         }
 
@@ -445,10 +462,10 @@
                 card.innerHTML = `
                     <div class="w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-slate-50 dark:bg-slate-800/80 p-3 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm group-hover:scale-105 transition-transform duration-300 mb-3">
                         <img src="${logoSrc || ''}" alt="Ava-Srabamon Youth Meeting Logo" class="w-full h-full object-contain rounded-2xl"
-                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                        onerror="handleImageError(this)">
                     </div>
                     
-                    <h3 class="text-base md:text-lg font-black text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5 leading-tight">${team.name}</h3>
+                    <h3 class="text-base md:text-lg font-black text-slate-800 dark:text-white group-hover:text-blue-600 dark group-hover:text-blue-400 transition-colors mb-1.5 leading-tight">${team.name}</h3>
                     
                     <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 px-4 py-1.5 rounded-xl">
                         <span class="text-[9px] font-extrabold text-slate-500 dark:text-slate-400 block mb-0.5">النسبة الكلية</span>
@@ -506,7 +523,7 @@
 
                     <div class="w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-white/90 dark:bg-slate-800/90 p-3 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm mt-3 mb-2.5">
                         <img src="${item.logo || ''}" alt="Ava-Srabamon Youth Meeting Logo" class="w-full h-full object-contain rounded-2xl"
-                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI5MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                        onerror="handleImageError(this)">
                     </div>
                     
                     <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-white mb-1.5 leading-tight">${item.name}</h3>
@@ -713,9 +730,9 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             initTheme();
-            fetchSheetData();
+            fetchSheetData(false);
             // تحديث تلقائي كل 10 دقائق (600,000 مللي ثانية)
-            autoRefreshTimer = setInterval(fetchSheetData, 600000);
+            autoRefreshTimer = setInterval(() => fetchSheetData(false), 600000);
         });
     </script>
 </body>
