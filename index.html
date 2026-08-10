@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>اجتماع شباب الأنبا صرابامون - تقييم الفرق</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- الخطوط العربية (Cairo & Amiri) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        darkbg: '#0f172a',
+                        darkcard: '#1e293b',
+                        darkborder: '#334155',
+                        lightbg: '#f1f5f9',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { transition: background-color 0.3s, color 0.3s; }
+        .hidden-app { display: none !important; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .dark .glass-nav {
+            background: rgba(30, 41, 59, 0.92);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes floatPulse {
+            0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 10px 20px rgba(59, 130, 246, 0.4)); }
+            50% { transform: scale(1.08) translateY(-10px); filter: drop-shadow(0 25px 30px rgba(59, 130, 246, 0.7)); }
+        }
+        @keyframes orbitRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .logo-loader { animation: floatPulse 2.5s ease-in-out infinite; }
+        .orbit-ring { animation: orbitRotate 3.5s linear infinite; }
+
+        /* إطارات المراكز التنافسية (ذهبي، فضي، برونزي) */
+        .gold-card {
+            border: 2px solid #f59e0b;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.8) 0%, rgba(255, 255, 255, 0.95) 100%);
+            box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.3);
+        }
+        .dark .gold-card {
+            background: linear-gradient(135deg, rgba(120, 53, 15, 0.4) 0%, rgba(30, 41, 59, 0.95) 100%);
+        }
+
+        .silver-card {
+            border: 2px solid #94a3b8;
+            background: linear-gradient(135deg, rgba(241, 245, 249, 0.8) 0%, rgba(255, 255, 255, 0.95) 100%);
+            box-shadow: 0 10px 30px -5px rgba(148, 163, 184, 0.3);
+        }
+        .dark .silver-card {
+            background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(30, 41, 59, 0.95) 100%);
+        }
+
+        .bronze-card {
+            border: 2px solid #d97706;
+            background: linear-gradient(135deg, rgba(254, 215, 170, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%);
+            box-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.25);
+        }
+        .dark .bronze-card {
+            background: linear-gradient(135deg, rgba(124, 45, 18, 0.4) 0%, rgba(30, 41, 59, 0.95) 100%);
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden bg-lightbg text-slate-800 dark:bg-darkbg dark:text-slate-100 flex flex-col relative font-sans select-none">
+
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900 z-[300] flex flex-col items-center justify-center text-white transition-opacity duration-500 p-6">
+        <div class="relative flex items-center justify-center">
+            <div class="absolute -inset-5 rounded-full border-2 border-dashed border-blue-500/70 orbit-ring"></div>
+            <div class="absolute -inset-10 rounded-full border border-blue-400/20 animate-ping"></div>
+            <div class="absolute inset-0 rounded-full bg-blue-500/25 blur-2xl"></div>
+            
+            <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display logo-loader h-36 w-36 md:h-48 md:w-48 object-contain rounded-full bg-slate-800/90 p-2 border-2 border-blue-400/60 shadow-2xl relative z-10"
+                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+        </div>
+        <p class="mt-8 text-slate-300 font-bold text-sm tracking-wide">جاري تحميل البيانات والتحديث...</p>
+        <button id="retryBtn" onclick="fetchSheetData()" class="hidden mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg active:scale-95">إعادة المحاولة 🔄</button>
+    </div>
+
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-5 py-2.5 rounded-full shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-[200] text-xs md:text-sm font-bold flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+        <span id="toastMsg">تم الحفظ بنجاح!</span>
+    </div>
+
+    <div id="loginScreen" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md flex items-center justify-center z-[100] transition-opacity duration-500 hidden">
+        <div class="bg-white dark:bg-darkcard p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-t-4 border-blue-500 mx-4">
+            <div class="mb-5 flex justify-center">
+                <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-full ring-4 ring-blue-100 dark:ring-blue-900/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+            </div>
+            <h2 class="text-xl md:text-2xl font-black text-slate-800 dark:text-white mb-6 meeting-name-display">اجتماع شباب الأنبا صرابامون</h2>
+            
+            <form onsubmit="checkPassword(event)" class="space-y-4">
+                <div class="text-right">
+                    <label class="block text-slate-600 dark:text-slate-400 text-xs md:text-sm font-bold mb-2 mr-1">رمز الدخول:</label>
+                    <input type="password" id="passwordInput" 
+                        class="w-full px-4 py-3 border border-slate-300 dark:border-darkborder dark:bg-slate-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-center text-lg tracking-widest"
+                        placeholder="أدخل الرمز هنا" required>
+                </div>
+                <p id="errorMsg" class="text-red-500 text-xs hidden font-bold bg-red-50 dark:bg-red-900/20 p-2 rounded-lg border border-red-100 dark:border-red-900/30">رمز الدخول غير صحيح!</p>
+                <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md transition transform active:scale-95 flex justify-center items-center gap-2 mt-4">
+                    <span>تسجيل الدخول</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainApp" class="flex flex-col h-full w-full relative">
+        
+        <!-- Header -->
+        <header class="fixed top-1.5 md:top-3 left-2 right-2 md:left-3 md:right-3 z-40 mx-auto max-w-5xl glass-nav rounded-2xl px-3 md:px-4 py-2 flex justify-between items-center transition-all duration-300">
+            <!-- زر التبديل للوضع الليلي / النهاري -->
+            <div class="flex items-center gap-2 z-10">
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 flex items-center justify-center" id="themeToggleBtn" title="التبديل بين الوضع الليلي والنهاري"></button>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center cursor-pointer" onclick="switchTab('teams')" title="الرئيسية">
+                <h1 class="text-sm md:text-lg font-black tracking-wide text-slate-900 dark:text-white leading-tight meeting-name-display">اجتماع شباب الأنبا صرابامون</h1>
+            </div>
+
+            <div class="flex items-center justify-end z-10">
+                <!-- الضغط على اللوجو يُجري عملية تحديث البيانات -->
+                <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-9 w-9 md:h-11 md:w-11 object-contain rounded-full shadow-sm bg-white dark:bg-transparent border border-slate-200 dark:border-transparent cursor-pointer transition hover:scale-105 active:scale-95" onclick="fetchSheetData()" title="تحديث البيانات الآن"
+                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-hidden relative pt-[62px] md:pt-[76px] flex flex-col max-w-5xl mx-auto w-full px-3 md:px-5">
+            
+            <div id="alertBanner" class="hidden w-full bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-200 p-2.5 rounded-xl text-center text-xs md:text-sm font-bold flex items-center justify-center gap-2 mb-2 shadow-sm shrink-0">
+                <span class="text-base shrink-0">📢</span>
+                <span id="alertText" class="leading-relaxed"></span>
+            </div>
+
+            <div class="flex items-center justify-center gap-3 my-2 shrink-0">
+                <button id="tabBtnTeams" onclick="switchTab('teams')" class="flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-white dark:bg-darkcard text-blue-600 dark:text-blue-400 border-2 border-blue-500 shadow-lg scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    <span>Teams</span>
+                </button>
+                <button id="tabBtnRanking" onclick="switchTab('ranking')" class="flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    <span>Ranking</span>
+                </button>
+            </div>
+
+            <div id="viewTeams" class="flex-1 overflow-y-auto pb-32 space-y-4 pt-1 px-1">
+                <!-- شريط البحث عن فريق -->
+                <div class="relative w-full">
+                    <input type="text" id="searchTeamsInput" oninput="filterTeams(this.value)" placeholder="🔍 بحث عن فريق..." 
+                        class="w-full py-2.5 px-4 pr-10 bg-white dark:bg-darkcard text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-darkborder rounded-2xl outline-none text-xs md:text-sm font-bold focus:ring-2 focus:ring-blue-500 shadow-sm transition">
+                    <svg class="absolute right-3.5 top-3 h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+
+                <div id="teamsCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 md:gap-6"></div>
+                
+                <!-- لوجو الاجتماع السفلي -->
+                <div class="pt-8 pb-12 flex flex-col items-center justify-center border-t border-slate-200/60 dark:border-slate-800/80">
+                    <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-32 w-32 md:h-44 md:w-44 object-contain rounded-3xl p-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 shadow-md transition hover:scale-105"
+                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    <span class="mt-3 text-xs md:text-sm font-black text-slate-500 dark:text-slate-400 tracking-wider meeting-name-display">اجتماع شباب الأنبا صرابامون</span>
+                </div>
+            </div>
+
+            <div id="viewRanking" class="hidden-app flex-1 overflow-y-auto pb-32 space-y-6 pt-2 px-1">
+                <div id="rankingCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 md:gap-6"></div>
+
+                <!-- لوجو الاجتماع السفلي -->
+                <div class="pt-8 pb-12 flex flex-col items-center justify-center border-t border-slate-200/60 dark:border-slate-800/80">
+                    <img src="" alt="Ava-Srabamon Youth Meeting Logo" class="logo-display h-32 w-32 md:h-44 md:w-44 object-contain rounded-3xl p-3 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 shadow-md transition hover:scale-105"
+                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    <span class="mt-3 text-xs md:text-sm font-black text-slate-500 dark:text-slate-400 tracking-wider meeting-name-display">اجتماع شباب الأنبا صرابامون</span>
+                </div>
+            </div>
+
+            <div id="viewTeamDetails" class="hidden-app flex-1 flex flex-col overflow-hidden pb-4">
+                <!-- شريط العودة واسم التيم -->
+                <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-darkborder mb-3 flex items-center justify-between shrink-0 gap-2">
+                    <button onclick="backToTeams()" class="flex items-center gap-1.5 text-xs md:text-sm font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-2 rounded-xl transition active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                        <span>رجوع</span>
+                    </button>
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                        <img id="detailTeamLogo" src="" alt="Ava-Srabamon Youth Meeting Logo" class="w-9 h-9 md:w-11 md:h-11 object-contain rounded-xl border border-slate-200 dark:border-slate-700 shrink-0" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                        <h2 id="detailTeamName" class="text-base md:text-xl font-black text-slate-800 dark:text-white truncate">اسم التيم</h2>
+                    </div>
+                    <div class="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800/60 px-3 py-1.5 rounded-xl text-center shrink-0">
+                        <span class="text-[9px] font-extrabold text-slate-500 dark:text-slate-400 block mb-0.5">النسبة الكلية</span>
+                        <span id="detailTeamTotalPercent" class="font-black text-xs md:text-sm text-blue-600 dark:text-blue-400">100%</span>
+                    </div>
+                </div>
+
+                <!-- شريط اختيار التاريخ وبحث الأعضاء -->
+                <div class="bg-white dark:bg-darkcard p-3 rounded-2xl shadow-sm border border-slate-200 dark:border-darkborder mb-3 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
+                    <div class="flex items-center gap-2 w-full md:w-auto shrink-0">
+                        <label class="text-xs md:text-sm font-extrabold text-slate-700 dark:text-slate-200 shrink-0">📅 اختر التاريخ:</label>
+                        <select id="dateSelector" onchange="onDateChanged(this.value)" class="flex-1 md:w-48 p-2 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-mono text-xs md:text-sm font-bold focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        </select>
+                    </div>
+
+                    <!-- البحث عن عضو -->
+                    <div class="relative w-full md:w-64">
+                        <input type="text" id="searchMembersInput" oninput="filterMembers(this.value)" placeholder="🔍 بحث عن اسم ..." 
+                            class="w-full py-2 px-3 pr-9 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-xs font-bold focus:ring-2 focus:ring-blue-500">
+                        <svg class="absolute right-2.5 top-2.5 h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                </div>
+
+                <!-- قائمة بطاقات تقييم الأعضاء -->
+                <div id="membersAssessmentList" class="flex-1 overflow-y-auto space-y-3 pr-1 pb-16"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+        const API_URL = "https://script.google.com/macros/s/AKfycbzhqQA_gWRiYmO5iSISTXgvaPO92Mrxvg7-s_UVe6I4PaJKUdxDEIhzgAEMiEUPTz4Ggg/exec";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        let CONFIG = {
+            PASSWORD: "",
+            MEETING_NAME: "اجتماع شباب الأنبا صرابامون",
+            LOGO_IMAGE: "",
+            ALERT: ""
+        };
+
+        let teamsData = [];        
+        let rankingData = [];      
+        let teamSheetsData = {};   
+        let activeTeam = null;
+        let selectedDate = null;
+        let autoRefreshTimer = null;
+
+        function processDriveUrl(url) {
+            if (!url) return "";
+            const str = String(url).trim();
+            const match = str.match(/\/file\/d\/([^\/\?]+)/) || str.match(/id=([^&]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return str;
+        }
+
+        function formatPercentValue(rawVal) {
+            if (rawVal === undefined || rawVal === null || rawVal === "") return "100%";
+            let str = String(rawVal).trim();
+            if (str.endsWith('%')) {
+                let num = parseFloat(str.replace('%', ''));
+                return isNaN(num) ? str : num.toFixed(1) + '%';
+            }
+            let num = parseFloat(str);
+            if (isNaN(num)) return str;
+            if (num <= 1 && num > 0) num = num * 100;
+            return num.toFixed(1) + '%';
+        }
+
+        async function fetchSheetData() {
+            const overlay = document.getElementById('loadingOverlay');
+            const retryBtn = document.getElementById('retryBtn');
+
+            overlay.classList.remove('hidden', 'opacity-0');
+            retryBtn.classList.add('hidden');
+
+            try {
+                const response = await fetch(API_URL, { redirect: 'follow' });
+                if (!response.ok) throw new Error(`HTTP Status ${response.status}`);
+                
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                if (data.settings) {
+                    const s = data.settings;
+                    CONFIG.PASSWORD = s.Password || s.PASSWORD || CONFIG.PASSWORD;
+                    CONFIG.MEETING_NAME = s.MeetingName || s.MEETING_NAME || CONFIG.MEETING_NAME;
+                    CONFIG.LOGO_IMAGE = processDriveUrl(s.LogoURL || s.LOGO_IMAGE || CONFIG.LOGO_IMAGE);
+                    CONFIG.ALERT = s.Alert || s.ALERT || "";
+                }
+
+                teamsData = data.teams || [];
+                rankingData = data.ranking || [];
+                teamSheetsData = data.teamSheets || {};
+
+                renderUI();
+                renderTeamsView();
+                renderRankingView();
+
+                if (activeTeam && teamSheetsData[activeTeam]) {
+                    const sheetInfo = teamSheetsData[activeTeam];
+                    document.getElementById('detailTeamTotalPercent').innerText = formatPercentValue(sheetInfo.teamTotalPercent);
+                    if (selectedDate) renderMembersForDate(selectedDate);
+                }
+
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 500);
+
+            } catch (error) {
+                console.error("خطأ أثناء جلب البيانات:", error);
+                retryBtn.classList.remove('hidden');
+            }
+        }
+
+        function checkPassword(e) {
+            e.preventDefault();
+            const input = document.getElementById('passwordInput').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const loginScreen = document.getElementById('loginScreen');
+
+            if (input === String(CONFIG.PASSWORD).trim()) {
+                loginScreen.style.opacity = '0';
+                setTimeout(() => loginScreen.classList.add('hidden'), 500);
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function renderUI() {
+            if (CONFIG.MEETING_NAME) {
+                document.title = CONFIG.MEETING_NAME;
+                document.querySelectorAll('.meeting-name-display').forEach(el => el.innerText = CONFIG.MEETING_NAME);
+            }
+            
+            if (CONFIG.LOGO_IMAGE) {
+                document.querySelectorAll('.logo-display').forEach(el => el.src = CONFIG.LOGO_IMAGE);
+            }
+            
+            const alertBanner = document.getElementById('alertBanner');
+            const alertText = document.getElementById('alertText');
+            if (CONFIG.ALERT && CONFIG.ALERT.trim() !== "") {
+                alertText.innerText = CONFIG.ALERT;
+                alertBanner.classList.remove('hidden');
+            } else {
+                alertBanner.classList.add('hidden');
+            }
+
+            const loginScreen = document.getElementById('loginScreen');
+            if (CONFIG.PASSWORD && CONFIG.PASSWORD.trim() !== "" && loginScreen.classList.contains('hidden')) {
+                loginScreen.classList.remove('hidden');
+            }
+        }
+
+        function switchTab(tab) {
+            const vTeams = document.getElementById('viewTeams');
+            const vRanking = document.getElementById('viewRanking');
+            const vDetails = document.getElementById('viewTeamDetails');
+            
+            const btnTeams = document.getElementById('tabBtnTeams');
+            const btnRanking = document.getElementById('tabBtnRanking');
+
+            vDetails.classList.add('hidden-app');
+
+            if (tab === 'teams') {
+                vTeams.classList.remove('hidden-app');
+                vRanking.classList.add('hidden-app');
+                
+                btnTeams.className = "flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-white dark:bg-darkcard text-blue-600 dark:text-blue-400 border-2 border-blue-500 shadow-lg scale-105";
+                btnRanking.className = "flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-blue-400";
+            } else {
+                vTeams.classList.add('hidden-app');
+                vRanking.classList.remove('hidden-app');
+
+                btnRanking.className = "flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-white dark:bg-darkcard text-blue-600 dark:text-blue-400 border-2 border-blue-500 shadow-lg scale-105";
+                btnTeams.className = "flex-1 max-w-[200px] py-2.5 px-6 rounded-2xl font-black text-sm md:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-blue-400";
+            }
+        }
+
+        function renderTeamsView(filterQuery = "") {
+            const grid = document.getElementById('teamsCardsGrid');
+            grid.innerHTML = '';
+
+            const q = filterQuery.trim().toLowerCase();
+
+            teamsData.forEach(team => {
+                if (q && !team.name.toLowerCase().includes(q)) return;
+
+                const sheetObj = teamSheetsData[team.name];
+                const rawPercent = sheetObj ? sheetObj.teamTotalPercent : team.totalPercent;
+                const formattedPercent = formatPercentValue(rawPercent);
+                const logoSrc = processDriveUrl(team.logo);
+                
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-darkcard p-4 md:p-5 rounded-3xl border border-slate-200 dark:border-darkborder hover:border-blue-500 dark:hover:border-blue-400 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center group relative overflow-hidden";
+                card.onclick = () => openTeamDetails(team.name);
+
+                card.innerHTML = `
+                    <div class="w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-slate-50 dark:bg-slate-800/80 p-3 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm group-hover:scale-105 transition-transform duration-300 mb-3">
+                        <img src="${logoSrc || ''}" alt="Ava-Srabamon Youth Meeting Logo" class="w-full h-full object-contain rounded-2xl"
+                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    </div>
+                    
+                    <h3 class="text-base md:text-lg font-black text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5 leading-tight">${team.name}</h3>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 px-4 py-1.5 rounded-xl">
+                        <span class="text-[9px] font-extrabold text-slate-500 dark:text-slate-400 block mb-0.5">النسبة الكلية</span>
+                        <span class="font-black text-sm md:text-base text-blue-600 dark:text-blue-400">${formattedPercent}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterTeams(val) {
+            renderTeamsView(val);
+        }
+
+        function renderRankingView() {
+            const grid = document.getElementById('rankingCardsGrid');
+            grid.innerHTML = '';
+
+            let allTeamsToRank = [...teamsData];
+
+            if (rankingData && rankingData.length > 0) {
+                rankingData.forEach(r => {
+                    let found = allTeamsToRank.find(t => t.name === r.name);
+                    if (found && r.logo) found.logo = processDriveUrl(r.logo);
+                    if (!found) allTeamsToRank.push(r);
+                });
+            }
+
+            let sortedRanking = allTeamsToRank.map(item => {
+                const sheetObj = teamSheetsData[item.name];
+                const rawPercent = sheetObj ? sheetObj.teamTotalPercent : item.totalPercent;
+                const cleanVal = isNaN(parseFloat(String(rawPercent).replace('%', ''))) ? 0 : parseFloat(String(rawPercent).replace('%', ''));
+                return {
+                    ...item,
+                    calcPercent: cleanVal,
+                    displayPercent: formatPercentValue(rawPercent),
+                    logo: processDriveUrl(item.logo)
+                };
+            }).sort((a, b) => b.calcPercent - a.calcPercent);
+
+            const rankTitles = ['الأول 🥇', 'الثاني 🥈', 'الثالث 🥉', 'الرابع 🏅', 'الخامس 🏅', 'السادس 🏅', 'السابع 🏅', 'الثامن 🏅'];
+            const frameClasses = ['gold-card', 'silver-card', 'bronze-card'];
+
+            sortedRanking.forEach((item, index) => {
+                const rankTitle = rankTitles[index] || `المركز ${index + 1}`;
+                const frameClass = frameClasses[index] || 'bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder';
+
+                const card = document.createElement('div');
+                card.className = `${frameClass} p-4 md:p-5 rounded-3xl shadow-sm transition-all duration-300 flex flex-col items-center justify-center text-center group relative overflow-hidden`;
+
+                card.innerHTML = `
+                    <div class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[11px] font-black ${index === 0 ? 'bg-amber-500 text-white' : index === 1 ? 'bg-slate-500 text-white' : index === 2 ? 'bg-amber-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}">
+                        ${rankTitle}
+                    </div>
+
+                    <div class="w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-white/90 dark:bg-slate-800/90 p-3 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm mt-3 mb-2.5">
+                        <img src="${item.logo || ''}" alt="Ava-Srabamon Youth Meeting Logo" class="w-full h-full object-contain rounded-2xl"
+                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI5MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7YtNio2KfYqDwvdGV4dD48L3N2Zz4='">
+                    </div>
+                    
+                    <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-white mb-1.5 leading-tight">${item.name}</h3>
+                    
+                    <div class="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 px-4 py-1.5 rounded-xl shadow-sm">
+                        <span class="text-[9px] font-extrabold text-slate-500 dark:text-slate-400 block mb-0.5">النسبة الكلية</span>
+                        <span class="font-black text-sm md:text-base text-emerald-600 dark:text-emerald-400">${item.displayPercent}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openTeamDetails(teamName) {
+            activeTeam = teamName;
+            const teamObj = teamsData.find(t => t.name === teamName) || {};
+            const sheetInfo = teamSheetsData[teamName] || { dates: [], members: [], teamTotalPercent: "100%" };
+
+            document.getElementById('viewTeams').classList.add('hidden-app');
+            document.getElementById('viewRanking').classList.add('hidden-app');
+            document.getElementById('viewTeamDetails').classList.remove('hidden-app');
+
+            document.getElementById('detailTeamName').innerText = teamName;
+            document.getElementById('detailTeamLogo').src = processDriveUrl(teamObj.logo);
+            document.getElementById('detailTeamTotalPercent').innerText = formatPercentValue(sheetInfo.teamTotalPercent);
+
+            const selector = document.getElementById('dateSelector');
+            selector.innerHTML = '';
+
+            if (sheetInfo.dates && sheetInfo.dates.length > 0) {
+                sheetInfo.dates.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d;
+                    opt.innerText = d;
+                    selector.appendChild(opt);
+                });
+                selectedDate = sheetInfo.dates[0];
+            } else {
+                selectedDate = null;
+            }
+
+            document.getElementById('searchMembersInput').value = '';
+            renderMembersForDate(selectedDate);
+        }
+
+        function backToTeams() {
+            document.getElementById('viewTeamDetails').classList.add('hidden-app');
+            document.getElementById('viewTeams').classList.remove('hidden-app');
+        }
+
+        function onDateChanged(newDate) {
+            selectedDate = newDate;
+            const searchVal = document.getElementById('searchMembersInput').value;
+            renderMembersForDate(selectedDate, searchVal);
+        }
+
+        function filterMembers(searchVal) {
+            renderMembersForDate(selectedDate, searchVal);
+        }
+
+        function renderMembersForDate(dateStr, searchQuery = "") {
+            const container = document.getElementById('membersAssessmentList');
+            container.innerHTML = '';
+
+            if (!activeTeam || !teamSheetsData[activeTeam] || !dateStr) {
+                container.innerHTML = `<div class="text-center p-8 bg-white dark:bg-darkcard rounded-2xl text-slate-500 font-bold">لا توجد بيانات لهذا التاريخ.</div>`;
+                return;
+            }
+
+            const sheetInfo = teamSheetsData[activeTeam];
+            const q = searchQuery.trim().toLowerCase();
+
+            sheetInfo.members.forEach((member, index) => {
+                if (q && !member.name.toLowerCase().includes(q)) return;
+
+                const currentScore = member.scores[dateStr] !== undefined ? member.scores[dateStr] : "";
+                const formattedPercent = formatPercentValue(member.percent);
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-darkborder flex flex-col gap-3 transition-all";
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-mono text-xs font-black w-6 h-6 rounded-lg flex items-center justify-center shrink-0">${index + 1}</span>
+                            <h3 class="font-extrabold text-slate-800 dark:text-slate-100 text-sm md:text-base truncate">${member.name}</h3>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <div class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl text-center">
+                                <span class="text-[9px] text-slate-500 dark:text-slate-400 block font-bold">المجموع</span>
+                                <span id="pts-${index}" class="font-black text-xs md:text-sm text-blue-600 dark:text-blue-400">${member.totalPoints || 0}</span>
+                            </div>
+                            <div class="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50 px-2.5 py-1 rounded-xl text-center">
+                                <span class="text-[9px] text-slate-500 dark:text-slate-400 block font-bold">النسبة</span>
+                                <span id="pct-${index}" class="font-black text-xs md:text-sm text-emerald-600 dark:text-emerald-400">${formattedPercent}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 pt-1">
+                        ${[15, 10, 5, 0].map(val => `
+                            <button onclick="updateScore('${member.name}', '${dateStr}', ${val}, ${index})"
+                                class="py-2 rounded-xl font-black text-xs md:text-sm transition-all shadow-sm active:scale-95 border ${String(currentScore) === String(val) 
+                                    ? (val === 15 ? 'bg-emerald-600 text-white border-emerald-600 ring-2 ring-emerald-300' 
+                                      : val === 10 ? 'bg-blue-600 text-white border-blue-600 ring-2 ring-blue-300'
+                                      : val === 5 ? 'bg-amber-500 text-white border-amber-500 ring-2 ring-amber-300'
+                                      : 'bg-rose-600 text-white border-rose-600 ring-2 ring-rose-300') 
+                                    : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'}"
+                            >
+                                ${val}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function updateScore(memberName, dateStr, scoreValue, memberIndex) {
+            showToast("جاري حفظ التقييم...");
+
+            if (activeTeam && teamSheetsData[activeTeam]) {
+                const sheetInfo = teamSheetsData[activeTeam];
+                const member = sheetInfo.members[memberIndex];
+                if (member) {
+                    member.scores[dateStr] = scoreValue;
+                    renderMembersForDate(dateStr, document.getElementById('searchMembersInput').value);
+                }
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: 'updateScore',
+                        teamName: activeTeam,
+                        memberName: memberName,
+                        date: dateStr,
+                        score: scoreValue
+                    })
+                });
+                
+                const res = await response.json();
+                if (res.success) {
+                    showToast("تم الحفظ في الجوجل شيت ✨");
+                    if (activeTeam && teamSheetsData[activeTeam]) {
+                        const sheetInfo = teamSheetsData[activeTeam];
+                        const member = sheetInfo.members[memberIndex];
+                        if (member) {
+                            if (res.totalPoints !== undefined) member.totalPoints = res.totalPoints;
+                            if (res.percent !== undefined) member.percent = res.percent;
+                            
+                            const ptsElem = document.getElementById(`pts-${memberIndex}`);
+                            const pctElem = document.getElementById(`pct-${memberIndex}`);
+                            if (ptsElem) ptsElem.innerText = member.totalPoints;
+                            if (pctElem) pctElem.innerText = formatPercentValue(member.percent);
+                        }
+
+                        if (res.teamTotalPercent !== undefined) {
+                            sheetInfo.teamTotalPercent = res.teamTotalPercent;
+                            document.getElementById('detailTeamTotalPercent').innerText = formatPercentValue(res.teamTotalPercent);
+                        }
+                    }
+                    renderTeamsView(document.getElementById('searchTeamsInput').value);
+                    renderRankingView();
+                }
+            } catch (err) {
+                console.error("خطأ في تحديث التقييم:", err);
+                showToast("تعذر الحفظ في الجوجل شيت");
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2200);
+        }
+
+        function initTheme() {
+            const btn = document.getElementById('themeToggleBtn');
+            if (!btn) return;
+            
+            if (document.documentElement.classList.contains('dark')) {
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+            } else {
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+            }
+            initTheme();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initTheme();
+            fetchSheetData();
+            // تحديث تلقائي كل 10 دقائق (600,000 مللي ثانية)
+            autoRefreshTimer = setInterval(fetchSheetData, 600000);
+        });
+    </script>
+</body>
+</html>
